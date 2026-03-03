@@ -114,3 +114,18 @@ add_filter( 'woocommerce_breadcrumb_home_url', 'lean_custom_shop_url' );
 function lean_custom_shop_url() {
     return home_url('/'); // Lo manda a la raíz donde está nuestra grilla
 }
+
+/**
+ * 9. CONTADOR DE CARRITO AJAX (Fragments)
+ * Actualiza el carrito en tiempo real contando PRODUCTOS DISTINTOS (no unidades).
+ */
+add_filter( 'woocommerce_add_to_cart_fragments', 'lean_cart_count_fragments', 10, 1 );
+function lean_cart_count_fragments( $fragments ) {
+    // Cuenta la cantidad de elementos (líneas) en el array del carrito
+    $count = WC()->cart ? count( WC()->cart->get_cart() ) : 0;
+    
+    // Este span reemplaza al viejo cuando el AJAX entra en acción
+    $fragments['span.lean-cart-count'] = '<span class="lean-cart-count badge bg-danger rounded-pill ms-2">' . $count . '</span>';
+    
+    return $fragments;
+}
